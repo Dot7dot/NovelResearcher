@@ -1,0 +1,23 @@
+import re
+import os
+
+# 讀取原始檔案, Read the novel first
+with open("NovelName.txt", encoding="utf-8") as f:
+    content = f.read()
+
+# 搜尋所有章回標題, Search the head of each chapters
+chapter_indices = [match.start() for match in re.finditer(r"第.+回\s+", content)]
+
+# 切割成章回, Split these chapters
+chapters = []
+for i in range(len(chapter_indices)):
+    start = chapter_indices[i]
+    end = chapter_indices[i+1] if i < len(chapter_indices) - 1 else len(content)
+    chapter = content[start:end].strip()
+    chapters.append(chapter)
+
+# 存成檔案, Save as "Novel_number_of_chapter" form
+for i, chapter in enumerate(chapters):
+    filename = f"NovelName_第{i+1}回.txt"
+    with open("NovelName/"+filename, "w", encoding="utf-8") as f:
+        f.write(chapter.replace("\n", ""))
